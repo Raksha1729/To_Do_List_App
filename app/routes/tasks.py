@@ -25,7 +25,7 @@ def add_task():
         flash('Task added successfully','success')
     return redirect(url_for('tasks.view_tasks'))
 
-@tasks_bp.route('/toggle/<int:task_id',method=["POST"])
+@tasks_bp.route('/toggle/<int:task_id',method=["POST"]) # changing the status of tasks
 def toggle_status(task_id):
     task=Task.query.get(task_id)
     if task:
@@ -36,4 +36,11 @@ def toggle_status(task_id):
         else:
             task.status=='Pending'
         db.session.commit()
+    return redirect(url_for('tasks.view_tasks'))
+
+@tasks_bp.route('/clear',methods=["POST"]) # To clear tasks
+def clear_tasks():
+    Task.query.delete()
+    db.session.commit()
+    flash('All tasks cleared!','info')
     return redirect(url_for('tasks.view_tasks'))
